@@ -3,11 +3,14 @@
 #include <stdlib.h>
 #include <string>
 #include <sstream>
+#include <map>
 
 using namespace std;
+
 long double seed = 0;
 unsigned int ulseed;
 int roll=10;
+
 
 unsigned int seed_(int x=3,int y=1, int z=-2,int w=-2) {
 
@@ -16,36 +19,44 @@ unsigned int seed_(int x=3,int y=1, int z=-2,int w=-2) {
   	seed = 0;
   	for(long double k = 0; div != 0; k++, div /= 16)
     	seed += div*(x/(8*k+1) + y/(8*k+4) + z/(8*k+5) + w/(8*k+6));		//Como sugerido pelo artigo, existem centenas de opções aqui, caberá ao usuario modificar os coeficientes ou nao.
-  	printf("%ld\n", sysTime);
-  	printf("%.60Lf\n", seed);
   	ostringstream sstseed;
   	sstseed.precision(58);
   	sstseed << seed;
-  	cout << sstseed.str() << endl;
   	string subseed = sstseed.str().substr(roll,10);
-  	printf("Substring: %s\n", subseed.c_str());
   	string::size_type sz;
   	long lseed = stol(subseed.c_str(),&sz);
-  	printf("%lu\n", lseed);
   	ulseed = lseed*sysTime;
   	roll=((roll+1)%10)+10;
-  	return seed;
+  	return ulseed;
 }
 
 
 unsigned int rand_(){
-  	printf("%Lf\n", seed);
-  	printf("%u\n", ulseed);
-    return ulseed =  (ulseed*5086967+982482349169);	//provisorio, seed vez um primo mais outro primo
+  	unsigned bit  = ((ulseed >> 0) ^ (ulseed >> 2) ^ (ulseed >> 3) ^ (ulseed >> 5) ) & 1;
+  	ulseed = (ulseed >> 1) | (bit << 15);
+    return ulseed;	//provisorio, seed vez um primo mais outro primo
 }
 
 void test_(){
-
+	unsigned int rnumber;
+	map<int, int> hst;
+	int cnt=0,i=1,cycle=0;
+	for(;i<1000000;i++) {
+    	rnumber=rand_();
+    	if (rnumber < 1000)  
+    		cnt++;
+    	if (hst[rnumber])   
+    		cycle++;
+    	hst[rnumber] = i;
+  	}
+  	printf("\nGerados %d numeros dos quais %d são menores que 1000.\n", i, cnt);
+  	printf("Além disso: %d foram repetidos.\n", cycle);
 }
 
 int main(int argc, char const *argv[])
 {
 	int op=1;
+	seed_();
 	printf("\tBem vindo ao: \n\n");
 	printf(" $$$$$$\\                                        $$$$$$\\ $$\\      $$\\ $$$$$$$$\\ \n");
 	printf("$$  __$$\\                                       \\_$$  _|$$$\\    $$$ |$$  _____|\n");
@@ -90,16 +101,15 @@ int main(int argc, char const *argv[])
             	printf("Seed gerado com sucesso...\n%u\n\n", ulseed);
             	break;       		
         	case 3:
-	            printf("Numero gerado com sucesso... \n%u \n\n", rand_());
+	            printf("Seed: %u \nNumero gerado com sucesso... \n%u \n\n", ulseed, rand_());
 	            break;
-
+	        case 4:
+	        	test_();
+	        	break;
         	default:
 	            printf("Opcao invalida.");
 	            break;
     	}
-
-		// for(int i=0;i<1;i++)
-		// 	rand_();
 		
 	}while(op!=0);
 	return 0;
