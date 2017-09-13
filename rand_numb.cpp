@@ -6,7 +6,7 @@
 
 using namespace std;
 long double seed = 0;
-unsigned long long ulseed;
+unsigned int ulseed;
 
 long double seed_(int x=3,int y=1, int z=-2,int w=-2) {
 
@@ -34,7 +34,7 @@ long double seed_(int x=3,int y=1, int z=-2,int w=-2) {
 long rand_()
   {
   	printf("%Lf\n", seed);
-  	printf("%llu\n", ulseed);
+  	printf("%u\n", ulseed);
     return ulseed =  (ulseed*5086967+982482349169);
   }
 
@@ -68,7 +68,7 @@ int main(int argc, char const *argv[])
 				break;
 			case 1:
 				seed_();
-	            printf("Seed gerado com sucesso...\n%llu\n\n", ulseed);
+	            printf("Seed gerado com sucesso...\n%u\n\n", ulseed);
             	break;
         	case 2:
         		int x,y,z,w;
@@ -82,7 +82,7 @@ int main(int argc, char const *argv[])
             	printf("w: ");
             	scanf("%d",&w);
             	seed_(x,y,z,w);
-            	printf("Seed gerado com sucesso...\n%llu\n\n", ulseed);
+            	printf("Seed gerado com sucesso...\n%u\n\n", ulseed);
             	break;       		
         	case 3:
 	            printf("Gerando numero... \n... \nNumero gerado com sucesso... \n%lu \n\n", rand_());
