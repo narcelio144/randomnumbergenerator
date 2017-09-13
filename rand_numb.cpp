@@ -7,8 +7,9 @@
 using namespace std;
 long double seed = 0;
 unsigned int ulseed;
+int roll=10;
 
-long double seed_(int x=3,int y=1, int z=-2,int w=-2) {
+unsigned int seed_(int x=3,int y=1, int z=-2,int w=-2) {
 
 	long sysTime = time(0);
   	long double div = 1.0;
@@ -21,22 +22,26 @@ long double seed_(int x=3,int y=1, int z=-2,int w=-2) {
   	sstseed.precision(58);
   	sstseed << seed;
   	cout << sstseed.str() << endl;
-  	string subseed = sstseed.str().substr(15,10);
+  	string subseed = sstseed.str().substr(roll,10);
   	printf("Substring: %s\n", subseed.c_str());
   	string::size_type sz;
   	long lseed = stol(subseed.c_str(),&sz);
   	printf("%lu\n", lseed);
   	ulseed = lseed*sysTime;
+  	roll=((roll+1)%10)+10;
   	return seed;
 }
 
 
-long rand_()
-  {
+unsigned int rand_(){
   	printf("%Lf\n", seed);
   	printf("%u\n", ulseed);
-    return ulseed =  (ulseed*5086967+982482349169);
-  }
+    return ulseed =  (ulseed*5086967+982482349169);	//provisorio, seed vez um primo mais outro primo
+}
+
+void test_(){
+
+}
 
 int main(int argc, char const *argv[])
 {
@@ -85,7 +90,7 @@ int main(int argc, char const *argv[])
             	printf("Seed gerado com sucesso...\n%u\n\n", ulseed);
             	break;       		
         	case 3:
-	            printf("Gerando numero... \n... \nNumero gerado com sucesso... \n%lu \n\n", rand_());
+	            printf("Numero gerado com sucesso... \n%u \n\n", rand_());
 	            break;
 
         	default:
